@@ -7,9 +7,11 @@ class Game {
 
     constructor() {
 
+        this.started = true;
+        this.paused = false;
         this.frame = 0;
         this.grid = [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -30,6 +32,7 @@ class Game {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ]
+        this.motionCoordinate = [0, 6]; // y, x
 
     }
 
@@ -63,45 +66,28 @@ class Game {
             for (let column = 0; column < this.grid[0].length; column++) {
                 // ctx.strokeRect(column * scalarX - (column * scalarX), row * scalarY, scalarY, scalarY);
                 ctx.strokeStyle = "white";
-                ctx.fillStyle = "green";
-                if (this.grid[row][column] == 1)
-                    ctx.strokeStyle = "red";
-                if (this.grid[row][column] == 2)
-                    ctx.fillRect(column * scalar * ((1.025-(1.1 - 1)) * 1.25) - (column), row * scalar * ((1.025-(1.1 - 1)) * 1.25) - (row), scalar, scalar);
+                if (!this.paused && this.started) {
+                    if (this.grid[row][column] == 1)
+                        ctx.strokeStyle = "red";
+                    if (this.grid[row][column] == 2) {
+                        ctx.fillStyle = "green";
+                        ctx.fillRect(column * scalar * ((1.025-(1.1 - 1)) * 1.25) - (column), row * scalar * ((1.025-(1.1 - 1)) * 1.25) - (row), scalar, scalar);
+                    }
+                }
                 ctx.strokeRect(column * scalar * ((1.025-(1.1 - 1)) * 1.25) - (column), row * scalar * ((1.025-(1.1 - 1)) * 1.25) - (row), scalar, scalar);
             }
         }
 
-        // let scalar = ;
-        // for (let row = 0; row < this.grid.length; row++) {
-        //     for (let column = 0; column < this.grid[0].length; column++) {
-        //         ctx.strokeRect(row * scalar, column * scalar, 10, 10);
-        //     }
-        // }
+    }
 
-        // let scalar = screenHeight / this.grid.length;
-       
-        // ctx.fillStyle = "#fff";
-        // for (let x = 0; x < this.grid.length; x++)
-        //     ctx.fillRect(0, x * scalar, screenWidth, 5);
+    translate(yAdd, xAdd) {
 
-        // ctx.fillStyle = "#fff";
-        // ctx.fillRect(0, 20 * scalar - 5, screenWidth, 5);
-    
-        // scalar = screenWidth / this.grid[0].length;
+        if (this.paused || !this.started) return;
         
-        // ctx.fillStyle = "#fff";
-        // for (let y = 0; y < this.grid[0].length; y++)
-        //     ctx.fillRect(y * scalar, 0, 5, screenHeight);
-    
-        // ctx.fillStyle = "#fff";
-        // ctx.fillRect(10 * scalar - 5, 0, 5, screenHeight);
-
-        // for (let i = 2; i < window.innerWidth / 3 * 0.99369085173; i += window.innerWidth / 3 * 0.09936908517) {
-        //     for (let v = 2; v < window.innerHeight * 0.95973884657; v += window.innerWidth / 3 * 0.09936908517) {
-        //         ctx.strokeRect(i, v, window.innerWidth / 3 * 0.09936908517, window.innerWidth / 3 * 0.09936908517);
-        //     }
-        // }
+        var [y, x] = this.motionCoordinate;
+        this.grid[y + yAdd][x + xAdd] = 1;
+        this.grid[y][x] = 0;
+        this.motionCoordinate = [y + yAdd, x + xAdd];
 
     }
 
@@ -110,7 +96,7 @@ class Game {
         this.drawBackground();
         this.drawGrid();
         this.frame++;
-        console.log("frame: " + this.frame);
+        // console.log("frame: " + this.frame);
         window.requestAnimationFrame(this.loop.bind(this));
 
     }
