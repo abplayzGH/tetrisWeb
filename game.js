@@ -11,10 +11,10 @@ class Game {
         this.grid = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -63,7 +63,11 @@ class Game {
             for (let column = 0; column < this.grid[0].length; column++) {
                 // ctx.strokeRect(column * scalarX - (column * scalarX), row * scalarY, scalarY, scalarY);
                 ctx.strokeStyle = "white";
-                if (this.grid[row][column] == 1) { ctx.strokeStyle = "red"; }
+                ctx.fillStyle = "green";
+                if (this.grid[row][column] == 1)
+                    ctx.strokeStyle = "red";
+                if (this.grid[row][column] == 2)
+                    ctx.fillRect(column * scalar * ((1.025-(1.1 - 1)) * 1.25) - (column), row * scalar * ((1.025-(1.1 - 1)) * 1.25) - (row), scalar, scalar);
                 ctx.strokeRect(column * scalar * ((1.025-(1.1 - 1)) * 1.25) - (column), row * scalar * ((1.025-(1.1 - 1)) * 1.25) - (row), scalar, scalar);
             }
         }
