@@ -89,6 +89,9 @@ class Game {
             var [y, x] = pair;
             if (x + xAdd > 9 || x + xAdd < 0) {
                 console.log("bounds: x");
+                for (const pair2 of piece.location) {
+                    this.grid[pair2[0]][pair2[1]] = 1;
+                }
                 return piece.location;
             }
             if (y + yAdd > 19) {
