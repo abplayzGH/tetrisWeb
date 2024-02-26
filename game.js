@@ -11,12 +11,12 @@ class Game {
         this.paused = false;
         this.frame = 0;
         this.grid = [
-            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -32,7 +32,7 @@ class Game {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ]
-        this.motionCoordinate = [0, 6]; // y, x
+        this.piece;
 
     }
 
@@ -66,7 +66,7 @@ class Game {
             for (let column = 0; column < this.grid[0].length; column++) {
                 // ctx.strokeRect(column * scalarX - (column * scalarX), row * scalarY, scalarY, scalarY);
                 ctx.strokeStyle = "white";
-                if (!this.paused && this.started) {
+                if (true) {
                     if (this.grid[row][column] == 1)
                         ctx.strokeStyle = "red";
                     if (this.grid[row][column] == 2) {
@@ -80,14 +80,47 @@ class Game {
 
     }
 
-    translate(yAdd, xAdd) {
+    translate(piece, yAdd, xAdd) {
 
-        if (this.paused || !this.started) return;
+        if (this.paused || !this.started) return piece.location;
         
-        var [y, x] = this.motionCoordinate;
-        this.grid[y + yAdd][x + xAdd] = 1;
-        this.grid[y][x] = 0;
-        this.motionCoordinate = [y + yAdd, x + xAdd];
+        const remap = [];
+        for (const pair of piece.location) {
+            var [y, x] = pair;
+            if (x + xAdd > 9 || x + xAdd < 0) {
+                console.log("bounds: x");
+                return piece.location;
+            }
+            if (y + yAdd > 19) {
+                this.piece.place();
+                console.log("placed: y bounds");
+                return piece.location;
+            }
+            if (this.grid[y + yAdd][x + xAdd] > 1) {
+                this.piece.place();
+                console.log("placed: touching solid");
+                return piece.location;
+            }
+            this.grid[y][x] = 0;
+            remap.push([y + yAdd, x + xAdd])
+            for (const pair2 of remap) { // maintaining shape color
+                this.grid[pair2[0]][pair2[1]] = 1;
+            }
+        }
+        return remap;
+
+        // var [y, x] = piece.location;
+        // this.grid[y + yAdd][x + xAdd] = 1;
+        // this.grid[y][x] = 0;
+        // this.motionCoordinate = [y + yAdd, x + xAdd];
+
+    }
+
+    over() {
+
+        this.paused = true;
+        this.started = false;
+        console.log("game over");
 
     }
 
@@ -95,6 +128,13 @@ class Game {
 
         this.drawBackground();
         this.drawGrid();
+        if (this.piece == null && this.frame > 1) {
+            this.piece = generatePiece();
+            console.log("piece added");
+        }
+        if (this.piece != null && this.frame % 75 == 0) {
+            this.piece.location = this.translate(this.piece, 1, 0);
+        }
         this.frame++;
         // console.log("frame: " + this.frame);
         window.requestAnimationFrame(this.loop.bind(this));
