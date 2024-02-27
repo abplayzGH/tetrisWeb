@@ -10,6 +10,7 @@ class Game {
         this.started = true;
         this.paused = false;
         this.frame = 0;
+        this.frameTick = 0;
         this.grid = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -33,6 +34,8 @@ class Game {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ]
         this.piece;
+        this.score = 0;
+        this.combo = 0;
 
     }
 
@@ -71,10 +74,10 @@ class Game {
                         ctx.strokeStyle = "red";
                     if (this.grid[row][column] == 2) {
                         ctx.fillStyle = "green";
-                        ctx.fillRect(column * scalar * ((1.025-(1.1 - 1)) * 1.25) - (column), row * scalar * ((1.025-(1.1 - 1)) * 1.25) - (row), scalar, scalar);
+                        ctx.fillRect(column * scalar /** ((1.025-(1.1 - 1)) * 1.25) - (column)*/, row * scalar /** ((1.025-(1.1 - 1)) * 1.25) - (row)*/, scalar - 3, scalar - 3);
                     }
                 }
-                ctx.strokeRect(column * scalar * ((1.025-(1.1 - 1)) * 1.25) - (column), row * scalar * ((1.025-(1.1 - 1)) * 1.25) - (row), scalar, scalar);
+                ctx.strokeRect(column * scalar /** ((1.025-(1.1 - 1)) * 1.25) - (column)*/, row * scalar /** ((1.025-(1.1 - 1)) * 1.25) - (row)*/, scalar - 3, scalar - 3);
             }
         }
 
