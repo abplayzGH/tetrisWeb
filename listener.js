@@ -20,7 +20,7 @@ window.addEventListener("keydown", (event) => {
             case "ArrowDown":
             case "KeyS":
                 game.piece.location = game.translate(game.piece, 1, 0);
-                game.frame = 0;
+                game.frame = 1;
                 break;
         
             case "ArrowRight":

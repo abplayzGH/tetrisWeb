@@ -113,6 +113,7 @@ class Game {
                 this.grid[pair2[0]][pair2[1]] = 1;
             }
         }
+        console.log(remap);
         return remap;
 
         // var [y, x] = piece.location;
